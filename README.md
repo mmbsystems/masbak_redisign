@@ -4,10 +4,10 @@ Static HTML landing page for Masbak.
 
 - Production entry point: `index.html`
 - Deployment platform: Vercel
-- Custom domain: `masbak.co` (configuration pending)
-- Original source: `masbaklanding.html`
+- Custom domain: `masbak.co`
+- Matching source copy: `masbaklanding.html`
 
-The production entry is an unchanged copy of the original source. Styles,
+The production entry and source copy are kept in sync. Styles,
 JavaScript, images, and the SVG diagram are embedded. Google Fonts supplies
 IBM Plex Sans Arabic; system fonts are used as a fallback.
 

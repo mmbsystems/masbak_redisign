@@ -211,6 +211,32 @@
   .foot-in{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center}
   footer a{color:#8FA39D;text-decoration:none}
   footer a:hover{color:var(--gold)}
+
+  /* Mobile rhythm: keep the desktop/tablet composition unchanged. */
+  @media(max-width:640px){
+    html{scroll-padding-top:88px}
+    section{padding:64px 0}
+    .hero{padding:48px 0 56px}
+    .hero p{margin-top:20px}
+    .hero .eyebrow{margin-top:0}
+    .bot{margin-top:28px;gap:8px}
+    .bot i{width:16px}
+    .hero-actions{margin-top:28px;gap:12px}
+    .grid,.bot-grid,.caps,.stats,.clients,.team,.vals,.disc{margin-top:32px}
+    .grid,.bot-grid{gap:18px}
+    .valley{margin-top:32px}
+    .contact{padding:56px 0 64px}
+    .contact img{margin-bottom:24px}
+    .contact .btn{margin-top:0}
+    footer{padding:28px 0}
+  }
+  /* Keep fixed-size portraits and long value labels inside narrow cards. */
+  @media(max-width:430px){.vals{grid-template-columns:1fr}}
+  @media(max-width:360px){
+    .team{grid-template-columns:1fr}
+    .bot{gap:4px}
+    .bot i{width:8px}
+  }
 </style>
 </head>
 <body>
@@ -557,17 +583,17 @@
     <h2>نحن لسنا مستشارين ولسنا منفّذين<br><span>نحن بُناة الكيانات.</span></h2>
     <p>لنبدأ المحادثة — أخبرنا عن تحدّيك.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px">
-      <a href="mailto:hello@masbak.co?subject=استفسار%20عن%20خدمات%20مَسبَك" class="btn btn-gold">راسلنا الآن</a>
+      <a href="mailto:m.alhamed@masbak.sa?subject=استفسار%20عن%20خدمات%20مَسبَك" class="btn btn-gold">راسلنا الآن</a>
       <a href="https://www.linkedin.com/company/masbak/" target="_blank" rel="noopener" class="btn btn-ghost">تابعنا على لينكدإن</a>
     </div>
-    <a href="mailto:hello@masbak.co" class="mail">hello@masbak.co</a>
+    <a href="mailto:m.alhamed@masbak.sa" class="mail">m.alhamed@masbak.sa</a>
   </div>
 </section>
 
 <footer>
   <div class="wrap foot-in">
     <div>© <span id="yr">2026</span> مَسبَك — شركة بناء وتحويل تشغيلي · المملكة العربية السعودية</div>
-    <div><a href="mailto:hello@masbak.co">hello@masbak.co</a> · <a href="https://masbak.co">masbak.co</a>
+    <div><a href="mailto:m.alhamed@masbak.sa">m.alhamed@masbak.sa</a> · <a href="https://masbak.co">masbak.co</a>
       · <a href="https://www.linkedin.com/company/masbak/" target="_blank" rel="noopener">LinkedIn</a></div>
   </div>
   <!-- يُنصح بإضافة رقم السجل التجاري والعنوان الوطني هنا لتعزيز التحقق -->
