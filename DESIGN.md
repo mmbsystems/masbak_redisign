@@ -1,0 +1,3 @@
+# Design
+
+Existing source tokens: green #123B35, gold #D7A53E, warm white #F6F4F1, cream #EDE9E4. Preserve IBM Plex Sans Arabic and original embedded logo. Brand voice: grounded, precise, institutional. Scene: an executive considering a transformation partner, reading deliberately on desktop or mobile. Dark green opening establishes identity, warm-white narrative supports sustained reading. User-supplied complete section brief governs composition. Gold accents only. SVG map is the requested visual asset; generated raster imagery is unnecessary. Desktop sticky BOT sequence becomes a normal vertical flow on mobile. Motion is finite and disabled with reduced motion.

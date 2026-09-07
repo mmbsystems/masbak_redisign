@@ -1,0 +1,10 @@
+import {chromium} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import assert from 'node:assert/strict';
+const b=await chromium.launch();const c=await b.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});const p=await c.newPage();await p.goto('http://127.0.0.1:3101',{waitUntil:'networkidle'});
+for(let i=0;i<3;i++){await p.locator(`#step-${i}`).evaluate(el=>el.scrollIntoView({block:'center'}));await p.waitForTimeout(150);assert.equal(await p.locator('.active-title').textContent(),['نبني','نُشغّل','ننقل'][i])}
+for(const detail of await p.locator('details').all())await detail.locator('summary').click();const a=await new AxeBuilder({page:p}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.equal(a.violations.length,0,JSON.stringify(a.violations));
+await p.goto('http://127.0.0.1:3101');await p.keyboard.press('Tab');assert.equal(await p.locator(':focus').textContent(),'انتقل إلى المحتوى');await p.keyboard.press('Enter');assert.equal(new URL(p.url()).hash,'#main');
+for(const [width,height] of [[320,640],[375,667],[390,844]]){await p.setViewportSize({width,height});await p.evaluate(()=>window.scrollTo(0,0));assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.equal(await p.locator('h1').evaluate(el=>el.getBoundingClientRect().bottom<innerHeight),true)}
+const nojs=await b.newContext({javaScriptEnabled:false});const n=await nojs.newPage();await n.goto('http://127.0.0.1:3101');assert.equal(await n.locator('h1').isVisible(),true);assert.equal(await n.locator('.step-story').count(),3);await n.locator('#work summary').click();assert.equal(await n.locator('.case-list').isVisible(),true);
+await p.setViewportSize({width:1440,height:1000});await p.goto('http://127.0.0.1:3101');await p.screenshot({path:'test-results/hero-desktop.png'});await p.setViewportSize({width:390,height:844});await p.screenshot({path:'test-results/hero-mobile.png'});console.log('PASS: BOT 01/02/03, expanded-content axe scan, keyboard skip link, short mobile viewports, no-JS content and native disclosures.');await b.close();
