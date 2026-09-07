@@ -93,7 +93,7 @@ h3 {
   font-size: 11px;
 }
 .body-copy {
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.95;
   color: var(--muted);
   max-width: 580px;
@@ -421,7 +421,7 @@ h3 {
 }
 .editorial-heading > p {
   color: var(--muted);
-  font-size: 17px;
+  font-size: 19px;
   margin-bottom: 10px;
 }
 .area-row {
@@ -481,7 +481,7 @@ h3 {
 .philosophy-bottom p {
   max-width: 490px;
   color: #c5cfc5;
-  font-size: 17px;
+  font-size: 19px;
 }
 .global-layout {
   display: grid;
@@ -685,7 +685,7 @@ details[open] summary span {
 }
 .contact p:not(.eyebrow) {
   color: #b9c7ba;
-  font-size: 18px;
+  font-size: 20px;
   margin-top: 24px;
 }
 .contact .button {
@@ -803,7 +803,7 @@ footer {
     font-size: 23px;
   }
   .body-copy {
-    font-size: 16px;
+    font-size: 17px;
   }
   .eyebrow {
     font-size: 11px;
@@ -866,7 +866,7 @@ footer {
     margin-bottom: 40px;
   }
   .editorial-heading > p {
-    font-size: 15px;
+    font-size: 17px;
     margin-top: 25px;
   }
   .area-row {
@@ -896,7 +896,7 @@ footer {
     padding-top: 25px;
   }
   .philosophy-bottom p {
-    font-size: 16px;
+    font-size: 17px;
     margin-top: 24px;
   }
   .global-layout {
@@ -976,7 +976,7 @@ footer {
     font-size: 36px;
   }
   .contact p:not(.eyebrow) {
-    font-size: 16px;
+    font-size: 17px;
   }
   .footer-main {
     flex-wrap: wrap;
