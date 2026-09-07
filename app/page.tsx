@@ -37,16 +37,17 @@ export default function Home() {
                 <span className="small-dot" /> شركة بناء وتحويل تشغيلي
               </p>
               <h1>
-                نبني محليًا.
+                نُهندس الكيانات
                 <br />
-                <span>ونُشغّل عالميًا.</span>
+                <span>ونُشغّلها.</span>
               </h1>
             </div>
             <div className="hero-support">
               <p className="hero-description">
-                نحوّل الاستراتيجيات والفرص إلى كيانات قابلة للتشغيل والنمو.
-                <br className="desktop-break" /> ونبني القدرة على العمل، أينما
-                كانت الفرصة.
+                نحوّل الاستراتيجيات والفرص غير الناضجة إلى كياناتٍ ومبادراتٍ قابلةٍ
+                للتشغيل والنمو والتمويل.
+                <br className="desktop-break" />
+                لا نبيع لك وثيقة، بل نبني معك ما يجعلها تعمل.
               </p>
               <div className="bot-label" dir="ltr">
                 BUILD <i /> OPERATE <i /> TRANSFER
