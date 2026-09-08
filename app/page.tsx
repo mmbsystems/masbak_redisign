@@ -228,11 +228,9 @@ export default function Home() {
                     <Image src={a.src} alt={a.alt} width={130} height={85} />
                   </div>
                 ))}
-                <p>
-                  مصنع كسوة الكعبة المشرفة
-                  <br />
-                  <small>مكة المكرمة</small>
-                </p>
+                <div>
+                  <Image src="/brand/piflow.svg" alt="PiFlow" width={130} height={85} />
+                </div>
               </div>
             </details>
             <details id="team" open>
