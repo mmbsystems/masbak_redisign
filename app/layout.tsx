@@ -24,6 +24,11 @@ export const metadata: Metadata = {
   description:
     "مَسبَك شركة بناء وتحويل تشغيلي سعودية. نحوّل الاستراتيجيات والفرص إلى كيانات قادرة على التشغيل والنمو.",
   robots: { index: false, follow: false },
+  icons: {
+    icon: "/brand/FAV_ICON.png",
+    shortcut: "/brand/FAV_ICON.png",
+    apple: "/brand/FAV_ICON.png",
+  },
 };
 export default function RootLayout({
   children,
