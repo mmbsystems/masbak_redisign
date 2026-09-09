@@ -12,6 +12,7 @@ const types = {
   ".woff2": "font/woff2",
   ".json": "application/json",
   ".txt": "text/plain",
+  ".xml": "application/xml; charset=utf-8",
 };
 http
   .createServer((req, res) => {
