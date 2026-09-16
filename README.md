@@ -1,6 +1,6 @@
 # Masbak experimental redesign
 
-Local redesign copy only. No deployment, DNS, Vercel, email infrastructure or production changes were made. The preview includes `noindex, nofollow` metadata.
+Local redesign copy only. No deployment, DNS, Vercel, email infrastructure or production changes were made. The production export uses `index, follow` metadata and `https://www.masbak.co/` as its canonical URL. See `SEO-REPORT.md` for indexing verification and deployment follow-up.
 
 ## Run
 
@@ -9,6 +9,7 @@ Local redesign copy only. No deployment, DNS, Vercel, email infrastructure or pr
 - `npm run build` produces the static site in `out/`.
 - `npm start` serves that build locally at http://127.0.0.1:3101.
 - `npm run lint` and `npm run typecheck`.
+- `node scripts/check-seo.mjs` after building checks exported indexing metadata, sitemap XML and CSS/JS assets (requires Playwright Chromium).
 - `npm run test:ui` with the static preview running; first install the browser with `npx playwright install chromium`.
 - `node scripts/check-interactions.mjs` for BOT, keyboard, disclosures and no-JavaScript checks.
 

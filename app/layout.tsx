@@ -19,11 +19,11 @@ const arabic = localFont({
   variable: "--font-arabic",
   display: "swap",
 });
-const siteUrl = "https://masbak.co/";
+const siteUrl = "https://www.masbak.co/";
 const title = "مَسبَك | بناء الكيانات والتحويل التشغيلي في السعودية";
 const description =
   "مَسبَك شركة بناء وتحويل تشغيلي سعودية. نصمم نموذج العمل، نبني الفريق والأنظمة والعمليات، ونطلق التشغيل ثم ننقل كيانًا قادرًا على الاستمرار والنمو.";
-const brandImage = "https://masbak.co/brand/asset-0.png";
+const brandImage = `${siteUrl}brand/asset-0.png`;
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title,

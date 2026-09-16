@@ -1,102 +1,93 @@
-# Technical SEO report — Masbak
+# SEO indexing investigation and fixes
 
-Audit date: 2026-09-09. Scope: invisible technical SEO only. No deployment was performed.
+Audit date: 2026-09-17 (Asia/Riyadh).
+Preferred production URL: https://www.masbak.co/
+Scope: technical indexing only. No deployment, push, DNS or hosting setting changes. No visible content, design, layout, styling, images or unrelated functionality changed.
 
-## Initial status
+## Root cause and evidence
 
-The project is a static-export Next.js site with one public content route, `/`. Existing Arabic title and description, `lang="ar" dir="rtl"`, favicon references, and descriptive image attributes were present. Homepage robots metadata explicitly blocked indexing and link following. Canonical, social metadata, JSON-LD, robots.txt and sitemap.xml were absent.
+The original source was `app/layout.tsx`: `robots: { index: false, follow: false }`. Git commit `5473860` introduced it; it remained in `a551686`. Next.js renders those values as `<meta name="robots" content="noindex, nofollow">`.
 
-Production checks: https://masbak.co/ returned 308 to https://www.masbak.co/, which returned 200. The live homepage had `noindex, nofollow`. Both production /robots.txt and /sitemap.xml returned 404 after following redirects. No X-Robots-Tag was present on the homepage response chain. HTTPS and HSTS were present. These observations describe the pre-deployment site, not the revised local build.
+An earlier commit, `70688b5` (Add technical SEO setup), already changed the source to `index: true, follow: true`. At the start of this investigation the working tree was clean. Direct live HTTP requests and a Chromium browser check now confirm that the production homepage also returns `index, follow`, with no X-Robots-Tag response header. Therefore the reported noindex exclusion is not reproducible on today's homepage. A historical crawl is a possible explanation; the Search Console crawl date and URL Inspection details were not available and this is not asserted as a confirmed Google-side diagnosis.
 
-## Files and exact changes
+The remaining verified defect was inconsistent canonicalization: Vercel redirects the apex to www, but the live canonical, local metadata, robots sitemap declaration and sitemap entries pointed to the apex. This mismatch was corrected in the local codebase.
 
-Modified:
-- `app/layout.tsx`: production metadata base, canonical, index/follow, title/description, Open Graph, Twitter/X and JSON-LD in the head. Existing font setup, body, language/direction and favicon references retained.
-- `scripts/preview.mjs`: added application/xml MIME type for local sitemap preview only.
+## Files inspected
 
-Created:
-- `app/robots.txt`: static robots document, exported to /robots.txt.
-- `app/sitemap.xml`: static XML sitemap, exported to /sitemap.xml.
-- `SEO-KEYWORDS.md`: qualitative keyword and intent map.
-- `SEO-REPORT.md`: this report.
+- All tracked project paths and top-level hidden configuration were inventoried. Project source, scripts, archived HTML, content data and public text assets were searched for robots directives, noindex/nofollow, X-Robots-Tag, disallow rules, canonical URLs and dynamic head manipulation.
+- `app/layout.tsx`, `app/page.tsx`, `app/robots.txt`, `app/sitemap.xml`; page/component metadata and client effects.
+- `components/navigation.tsx`, `components/bot-sequence.tsx`, `components/ui/reveal.tsx`, `components/ui/world-map.tsx`.
+- `next.config.ts`, `package.json`, `scripts/preview.mjs`, other project scripts, `.gitignore`, `eslint.config.mjs`, TypeScript configuration and Git history for the root layout.
+- `README.md`, previous `SEO-REPORT.md`, `SEO-KEYWORDS.md`, project instructions and archive HTML references.
+- Installed Next.js guides and metadata resolvers, plus generated `out/index.html`, error-page HTML, `out/robots.txt`, `out/sitemap.xml` and referenced CSS/JS assets.
+- No project `vercel.json`, middleware, proxy, custom response-header configuration or local `.vercel` directory was present. Hosting dashboard settings were not accessible through this repository; actual Vercel behavior was inspected over HTTP.
 
-Generated verification evidence is stored in ignored `test-results/`, and production artifacts in ignored `out/`. The build-generated next-env.d.ts change was reverted to avoid unrelated changes.
+## Files modified and exact changes
 
-## Metadata
+| File | Change |
+| --- | --- |
+| `app/layout.tsx` | Changed site URL to `https://www.masbak.co/`; derived the existing brand image URL from it. Aligns metadata base, canonical, Open Graph, Twitter image and Organization/WebSite/WebPage JSON-LD URLs and identifiers. Retained explicit index/follow. |
+| `app/robots.txt` | Sitemap declaration now uses `https://www.masbak.co/sitemap.xml`; unrestricted crawling retained. |
+| `app/sitemap.xml` | The sole homepage location now uses `https://www.masbak.co/`. |
+| `next.config.ts` | Added `trailingSlash: true` so Next.js emits the requested root canonical with its trailing slash. Static file URLs remain unchanged; static export retained. |
+| `scripts/check-seo.mjs` | Added export regression checks for robots directives, canonical, social/schema URLs, XML validity/namespace, unique sitemap homepage and existence of referenced CSS/JS. |
+| `README.md` | Removed stale claim that the preview has noindex/nofollow; documented the canonical and SEO verification command. |
+| `SEO-REPORT.md` | Replaced the outdated report and its contradictory apex-domain deployment instructions with this audit. |
 
-Title: مَسبَك | بناء الكيانات والتحويل التشغيلي في السعودية
+The build-generated `next-env.d.ts` change was restored to its original tracked contents. Generated output remains ignored. No dependencies changed.
 
-Meta description: مَسبَك شركة بناء وتحويل تشغيلي سعودية. نصمم نموذج العمل، نبني الفريق والأنظمة والعمليات، ونطلق التشغيل ثم ننقل كيانًا قادرًا على الاستمرار والنمو.
+## Current status: local production export
 
-Canonical: https://masbak.co/
-
-Robots meta: `index, follow`.
-
-Language: existing `<html lang="ar" dir="rtl">`, Open Graph locale ar_SA, and schema inLanguage ar. No nonexistent language alternatives were added.
-
-Open Graph includes title, description, website type, production URL, site name مَسبَك, ar_SA locale and existing brand image https://masbak.co/brand/asset-0.png. Next.js serializes og:url as https://masbak.co; the canonical link retains its trailing slash. Both represent the root URL.
-
-Twitter/X includes summary_large_image, the same title/description and existing brand image. No unconfirmed Twitter account was supplied. The existing transparent logo is 435 × 173; platform cropping and large-card presentation may vary. No new image was created or resized.
-
-Existing /brand/FAV_ICON.png icon, shortcut icon and Apple icon references were retained. Both icon and logo return 200 locally. Existing image alt text, dimensions and loading behavior were retained unchanged.
-
-## Crawling and schema
-
-robots.txt:
+- Homepage returns HTTP 200 through the static preview.
+- Exactly one robots tag: `<meta name="robots" content="index, follow">`.
+- Exactly one canonical: `<link rel="canonical" href="https://www.masbak.co/">`.
+- Both tags are present without JavaScript and remain correct after hydration.
+- No homepage X-Robots-Tag header, no injected restrictive robots metadata, and no source-level indexing block found.
+- `robots.txt` returns 200 as text/plain and contains:
 
 ```text
 User-agent: *
 Allow: /
 
-Sitemap: https://masbak.co/sitemap.xml
+Sitemap: https://www.masbak.co/sitemap.xml
 ```
 
-Sitemap: https://masbak.co/sitemap.xml. Valid XML with exactly one loc, https://masbak.co/. No hash sections, test routes, archive files or error pages included. No fabricated last-modified date.
+This permits the homepage, CSS, JavaScript, fonts, images and all intended public content. There is only one public content route, `/`.
 
-JSON-LD uses linked Organization, WebSite and WebPage nodes with stable IDs. Organization uses only the visible name, business description, logo, email m.alhamed@masbak.sa and LinkedIn URL already in the footer. No LocalBusiness, address, phone, ratings or reviews were invented. JSON-LD is parsed successfully and safely escapes less-than characters. Generic schema validation in the hosted Schema.org validator remains a recommended post-deployment check; no external validator certification or rich-result eligibility is claimed.
+- `sitemap.xml` returns 200 as XML, parses successfully, uses the sitemap namespace and contains exactly one HTTPS www URL: `https://www.masbak.co/`. No duplicate, apex, HTTP, fragment or error-page entries.
+- Social metadata and JSON-LD consistently use the www origin. The existing image itself is unchanged.
+- Generated Next.js 404/not-found pages correctly retain noindex. These are error pages, not homepage indexing blockers; removing their noindex would be inappropriate.
 
-The local homepage has no noindex/nofollow or X-Robots-Tag block, and metadata contains no localhost, preview or staging URLs. Next.js error pages may intentionally remain noindex. robots.txt is not an access-control mechanism; deploy the export output, not the repository/archive/test folders.
+## Live status and redirects observed during this audit
 
-## Verification and design freeze
+| Request | Response |
+| --- | --- |
+| `http://masbak.co/` | 308 to `https://masbak.co/` |
+| `https://masbak.co/` | 308 to `https://www.masbak.co/` |
+| `https://www.masbak.co/` | 200, robots index/follow, no X-Robots-Tag; canonical still `https://masbak.co` |
+| `https://www.masbak.co/robots.txt` | 200; allows crawling, but sitemap declaration still uses apex |
+| `https://www.masbak.co/sitemap.xml` | 200; valid-looking XML with the old apex homepage entry |
 
-- Baseline build and revised `npm run build`: passed; homepage, robots.txt and sitemap.xml exported.
-- `npm run typecheck`: passed against generated production types.
-- `npm run lint`: passed with zero warnings in final run.
-- `npm run test:ui`: passed at 320, 360, 375, 390, 412, 430, 768, 1024, 1440 and 1920 pixels. No overflow, broken anchors, page errors or automated accessibility violations. Mobile menu open/close checks passed.
-- Full-page before/after PNGs at 390 and 1440 pixels were byte-identical with reduced motion enabled for deterministic comparison.
-- Exported body HTML was identical after excluding Next.js scripts. Page/component sources, CSS, fonts, assets and animation code were unchanged.
-- Local homepage, robots, sitemap, logo and icon returned HTTP 200. XML parsed without errors and contained only the expected URL. Required head tags and the three schema types passed assertions.
-- Evidence: test-results/seo-check.json, test-results/report.json, seo-before/after-390.png and seo-before/after-1440.png.
+Both requested alternate URLs already reach the canonical destination permanently; HTTP uses two hops. Existing Vercel redirects were preserved. This is a static export: Next.js runtime redirect/header/proxy rules are unsupported, so none were added. Retain the current apex-to-www hosting redirect on deployment. If hosting changes, that host must provide the same domain redirects; the exported files cannot perform server-side redirects themselves.
 
-DESIGN CHANGED: NO
-VISIBLE CONTENT CHANGED: NO
-LAYOUT CHANGED: NO
-CSS VISUAL CHANGES: NO
-ANIMATIONS CHANGED: NO
-SEO METADATA ADDED: YES
-ROBOTS.TXT READY: YES — local export
-SITEMAP.XML READY: YES — local export
-SCHEMA READY: YES — local validation
-GOOGLE INDEXING READY: local implementation ready; production deployment and domain alignment pending. Indexing itself is Google's decision.
+## Verification results
 
-## Keyword research summary
+- Regression check first failed against the old export on the non-www canonical, demonstrating detection of the existing mismatch.
+- Final `npm run build`: passed; `/`, robots.txt, sitemap.xml and framework error pages exported.
+- `node scripts/check-seo.mjs`: passed against the fresh export.
+- `npm run lint`: passed.
+- `npm run typecheck`: passed after the build.
+- `git diff --check`: passed (only normal Windows line-ending notices).
+- Chromium loaded both local and live homepages, executed JavaScript, and confirmed one index/follow tag with no restrictive response header. Local canonical exactly matches the requested URL; live canonical remains apex as described above.
+- Local and live robots, sitemap and brand image requests returned 200 with suitable content types. Export checks confirmed referenced CSS/JS files exist.
+- Final source scan found no restrictive production indexing directive or dynamic robots injection. Restrictive terms remain only in explanatory documentation, regression-test assertions and intentional framework error-page output.
 
-SEO-KEYWORDS.md covers primary, secondary, long-tail, Arabic, English, Saudi, commercial and brand terms, with intent, priority and the existing homepage for every keyword. Priorities are qualitative judgments based on service relevance. No live volume, difficulty, ranking or competitor data was available or invented. The industrial-foundry meaning of مسبك and infrastructure meaning of BOT require care. No meta keywords, hidden keywords or keyword stuffing were added.
+## Remaining issues and Search Console readiness
 
-## Recommendations intentionally not implemented
+The local project is ready for an authorized deployment. Nothing was deployed or pushed. Production will retain its existing canonical/sitemap mismatch until these changes are deployed.
 
-- Visible service landing pages and an English version could be considered only under a separate content scope; none were added.
-- No heading changes: the current page uses one H1 and H2/H3 sections; no skipped-level issue was found in the rendered sequence.
-- Team PNGs are approximately 1.47–2.03 MB each. Future image delivery optimization would require a separately approved scope; no compression, resizing, loading changes or source changes were made.
-- Consider a dedicated social sharing asset in a future branding scope. Existing logo preserved exactly.
-- No performance scores or Core Web Vitals improvement is claimed. No animation, JavaScript behavior, CSS or layout optimization was performed.
+After deployment, verify that the www homepage returns 200 with index/follow, the exact www canonical and no restrictive X-Robots-Tag; recheck both redirects and the two crawl files. Then submit `https://www.masbak.co/sitemap.xml`, run Search Console's live URL test on `https://www.masbak.co/`, request indexing for that canonical URL and use Validate Fix for the historical noindex issue where available. The apex/HTTP URLs are supposed to remain excluded as redirects; do not try to index them separately.
 
-## Production deployment and Search Console handoff
+Today's live page no longer reproduces the historical noindex block, so a live URL Inspection test can already confirm that condition. Full readiness for the requested canonical configuration remains conditional on deployment and post-deployment verification. Search Console history and Google's selected canonical were not inspected; indexing acceptance and timing cannot be guaranteed.
 
-1. Deploy the revised static export using the existing production deployment process. No deployment/account changes were made in this task.
-2. In hosting domain settings, serve https://masbak.co/ directly with HTTP 200 and redirect www to the apex, preserving paths. Remove the current apex-to-www redirect first to avoid a loop. This aligns hosting with the user's preferred canonical. Do not add an opposing application redirect while the hosting redirect remains active.
-3. After deployment, verify https://masbak.co/, https://masbak.co/robots.txt and https://masbak.co/sitemap.xml return 200 with HTML, text and XML content types respectively. Verify logo/icon access, no hosting X-Robots-Tag block, no authentication gate, and the new head tags. These live post-deployment checks are pending.
-4. Use the separately verified Search Console property for masbak.co. Submit https://masbak.co/sitemap.xml. Inspect https://masbak.co/ with the live URL test, then request indexing. No Google verification code was added.
-5. Review Google-selected canonical, sitemap processing and indexing reports after Google recrawls. Submission does not guarantee indexing or rankings.
-
-Google reference: [canonical consolidation guidance](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls) explains alignment of redirects, canonical links and sitemaps. [Sitemap submission guidance](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap) documents sitemap preparation. [Request a recrawl](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl) covers Search Console submission.
+`SEO-KEYWORDS.md` is a historical planning document with apex targets; it is not served or used to generate metadata. Archived HTML and the visible footer's apex link were preserved as requested and do not emit canonical or noindex directives. The footer destination follows the existing permanent redirect.
