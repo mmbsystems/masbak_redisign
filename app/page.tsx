@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { homepageMetadata, homepageJsonLd } from "@/lib/seo";
 import Image from "next/image";
 import { Navigation } from "@/components/navigation";
 import { WorldMap } from "@/components/ui/world-map";
@@ -20,9 +22,17 @@ const journey = [
   ["OPERATE", "تشغيل", "نختبر ونحسّن في الميدان."],
   ["TRANSFER", "نقل", "نمكّن الاستقلالية."],
 ];
+export const metadata: Metadata = homepageMetadata;
+
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(homepageJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <a className="skip-link" href="#main">
         انتقل إلى المحتوى
       </a>
@@ -301,7 +311,7 @@ export default function Home() {
             >
               LinkedIn ↗
             </a>
-            <a href="https://masbak.co">masbak.co ↗</a>
+            <a href="https://www.masbak.co/">masbak.co ↗</a>
           </div>
         </div>
         <div className="shell footer-bottom">
